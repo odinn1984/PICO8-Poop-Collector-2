@@ -80,10 +80,10 @@ function AddPoop(cellX, cellY)
     poop.attributes.h = 8
     poop.attributes.w = 8
     poop.attributes.currentSprite = animData.sprites[1]
-    poop.attributes.hitbox.x = 2
-    poop.attributes.hitbox.y = 2
-    poop.attributes.hitbox.w = 4
-    poop.attributes.hitbox.h = 4
+    poop.attributes.hitbox.x = 0
+    poop.attributes.hitbox.y = 0
+    poop.attributes.hitbox.w = 8
+    poop.attributes.hitbox.h = 8
     poop.attributes.animationStart = time()
 
     poopsTable[#poopsTable + 1] = poop

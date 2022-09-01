@@ -1,4 +1,4 @@
-function CreateHazard()
+function CreateSceneItem()
     return {
         p = {
             x = 0,
@@ -21,10 +21,10 @@ function CreateHazard()
     }
 end
 
-function DrawHazards()
-    DrawAllSpikes()
+function DrawSceneItems()
+    DrawAllBubbles()
 end
 
-function UpdateHazards()
-    UpdateAllSpikes()
+function UpdateSceneItems()
+    UpdateAllBubbles()
 end

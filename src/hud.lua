@@ -6,6 +6,7 @@ local function drawPlayerTarget()
 
     rect(offset.x, offset.y, offset.x + 127, offset.y + 127, frameClr)
     rectfill(offset.x, offset.y, offset.x + 127, offset.y + 10, frameClr)
+    rect(offset.x, offset.y, offset.x + 127, offset.y + 10, frameClr)
 
     if CurrentLevelKeyPresent() and not CurrentLevelOpen() then
         curSpr = SPR_KEY
@@ -14,7 +15,7 @@ local function drawPlayerTarget()
     else
         print(
             GetPoopsRemaining(),
-            offset.x + 14,
+            offset.x + 13,
             offset.y + 3,
             txtColor
         )
@@ -22,8 +23,29 @@ local function drawPlayerTarget()
 
     spr(
         curSpr,
-        offset.x + 4,
+        offset.x + 3,
         offset.y + 1
+    )
+end
+
+local function drawCurrentLevel()
+    local offset = GetCurrentLevelPos()
+    local lvlText = 'lvl ' .. GetCurrentLevelNumber()
+    local lvlTextStartPosX = offset.x + 64 - (#lvlText * 2)
+    local lvlTextEndPosX = offset.x + 64 + (#lvlText * 2)
+
+    rectfill(
+        lvlTextStartPosX - 4,
+        offset.y + 121,
+        lvlTextEndPosX + 4,
+        offset.y + 127,
+        CLR_DARK_BLUE
+    )
+    print(
+        lvlText,
+        lvlTextStartPosX,
+        offset.y + 122,
+        CLR_WHITE
     )
 end
 
@@ -37,15 +59,33 @@ local function drawTimer()
         if levelTimePassed > GetCurrentLevelBestTime() then
             timerColor = CLR_RED
         elseif levelTimePassed <= GetCurrentLevelBestTime() then
-            timerColor = CLR_GREEN
+            timerColor = CLR_ORANGE
         end
     end
 
-    print(timer, offset.x + 64 - (#timer * 2), offset.y + 3, timerColor)
+    local timerStartPosX = offset.x + 64 - (#timer * 2)
+    local timerEndPosX = offset.x + 64 + (#timer * 2)
+
+    rectfill(
+        timerStartPosX - 6,
+        offset.y + 0,
+        timerEndPosX +6,
+        offset.y + 10,
+        CLR_DARK_GREY
+    )
+
+    print(timer, timerStartPosX, offset.y + 3, timerColor)
+    print(
+        GetFormattedTime(GetCurrentLevelBestTime()),
+        offset.x + 126 - (#(GetFormattedTime(GetCurrentLevelBestTime())) * 4),
+        offset.y + 3,
+        CLR_GREEN
+    )
 end
 
 function DrawPlayerHUD()
     drawPlayerTarget()
+    drawCurrentLevel()
     drawTimer()
 end
 

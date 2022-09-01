@@ -1,7 +1,7 @@
 SPR_DOOR_CLOSED = 5
 SPR_DOOR_OPENED = 6
 
-MAX_LEVEL = 2
+MAX_LEVEL = 8
 
 local currentLevel = 1
 local currentLevelKeyPosCells = { cx = 0, cy = 0 }
@@ -21,6 +21,7 @@ local function shouldClearCell(cx, cy)
         curCell == SPR_BG_1 or
         curCell == SPR_BG_2 or
         curCell == SPR_BG_3 or
+        curCell == SPR_BUBBLE or
         curCell == SPR_POOP or
         curCell == SPR_POOP_1 or
         curCell == SPR_KEY or
@@ -37,7 +38,7 @@ end
 
 function LoadLevel(levelNum)
     local cxStart = ((levelNum - 1) * 16) % 128
-    local cyStart = flr((levelNum - 1) / 7)
+    local cyStart = (flr((levelNum - 1) / 8) * 16) % 128
 
     currentLevelKeyPosCells = { cx = 0, cy = 0 }
     currentLevelPlayerPosCells = { cx = 0, cy = 0, dir= DIRECTION_NONE }
@@ -63,6 +64,8 @@ function LoadLevel(levelNum)
                 poopTarget = poopTarget + 1
                 keyTarget = keyTarget + 1
                 currentLevelKeyPosCells = { cx = cx, cy = cy }
+            elseif curCell == SPR_BUBBLE then
+                AddBubble(cx, cy)
 			elseif curCell == SPR_DASH_1 then
 				AddDash(cx, cy)
 			elseif curCell == SPR_SPIKE_H or curCell == SPR_SPIKE_H_FLIP_Y then
@@ -98,9 +101,6 @@ end
 function ResetCurrentLevel()
     reload(0x1000, 0x1000, 0x2000)
 
-    FadeOut()
-    Wait(15)
-
     Player:ResetKeys()
     Player:ResetPoops()
     Player:ResetPoints()
@@ -118,6 +118,11 @@ function ResetCurrentLevel()
     pal()
 end
 
+function ResetCurrentLevelBestTime()
+    dset(currentLevel - 1, 0)
+    ResetCurrentLevel()
+end
+
 function NextLevel()
     if currentLevel == MAX_LEVEL then
         return
@@ -133,17 +138,21 @@ function IsLastLevel()
     return currentLevel == MAX_LEVEL
 end
 
+function GetCurrentLevelNumber()
+    return currentLevel
+end
+
 function GetCurrentLevelCellPos()
     return {
-        cx = (((currentLevel - 1) * 16) % 128),
-        cy = (flr((currentLevel - 1) / 7))
+        cx = ((currentLevel - 1) * 16) % 128,
+        cy = (flr((currentLevel - 1) / 8) * 16) % 128
     }
 end
 
 function GetCurrentLevelPos()
     return {
         x = (((currentLevel - 1) * 16) % 128) * 8,
-        y = (flr((currentLevel - 1) / 7)) * 8
+        y = (((flr((currentLevel - 1) / 8)) * 16) % 128) * 8
     }
 end
 
@@ -219,6 +228,23 @@ end
 
 function CurrentLevelOpen()
     return doorOpen
+end
+
+function GetDoorCollisionData()
+    return {
+        p = {
+            x = currentLevelDoorPosCells.cx * 8,
+            y = currentLevelDoorPosCells.cy * 8
+        },
+        w = 8,
+        h = 8,
+        hitbox = {
+            x = 0,
+            y = 0,
+            w = 8,
+            h = 8
+        }
+    }
 end
 
 function SetCurrentLevelStartTime(t)

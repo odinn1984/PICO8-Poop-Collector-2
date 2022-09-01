@@ -79,7 +79,7 @@ function AddKey(cellX, cellY)
     key.attributes.w = 8
     key.attributes.currentSprite = animData.sprites[1]
     key.attributes.hitbox.x = 2
-    key.attributes.hitbox.y = 2
+    key.attributes.hitbox.y = 0
     key.attributes.hitbox.w = 4
     key.attributes.hitbox.h = 4
     key.attributes.animationStart = time()

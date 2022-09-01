@@ -1,9 +1,6 @@
 STATE_MAIN_MENU = 0
-STATE_GAME_PAUSE = 1
-STATE_GAME_LOOP = 2
-STATE_GAME_DIALOG = 3
-STATE_GAME_WIN = 4
-STATE_GAME_OVER = 5
+STATE_GAME_LOOP = 1
+STATE_GAME_WIN = 2
 
 local currentState = STATE_GAME_LOOP
 
@@ -18,11 +15,15 @@ end
 function GameUpdate()
     if currentState == STATE_GAME_LOOP then
         GameLoopUpdate()
+    elseif currentState == STATE_GAME_WIN then
     end
 end
 
 function GameDraw()
+    cls()
+
     if currentState == STATE_GAME_LOOP then
         GameLoopDraw()
+    elseif currentState == STATE_GAME_WIN then
     end
 end

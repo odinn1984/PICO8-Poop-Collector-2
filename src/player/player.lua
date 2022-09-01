@@ -5,7 +5,7 @@ local SPR_JUMP_2 = 67
 local SPR_FALL = 68
 local SPR_INVINCIBLE = 69
 
-local PLAYER_INVINCIBLE = { name = "INVINCIBLE", sprites = { SPR_IDLE, SPR_INVINCIBLE }, interval = 0.2 }
+local PLAYER_INVINCIBLE = { name = "INVINCIBLE", sprites = { SPR_IDLE, SPR_INVINCIBLE }, interval = 0.1 }
 local PLAYER_IDLE = { name = "IDLE", sprites = { SPR_IDLE }, interval = 0 }
 local PLAYER_WALK = { name = "WALK", sprites = { SPR_IDLE, SPR_STEP }, interval = 0.1 }
 local PLAYER_JUMP = { name = "JUMP", sprites = { SPR_JUMP_1, SPR_JUMP_2 }, interval = 0 }
@@ -16,6 +16,7 @@ Player = {}
 
 function Player:init(spawn, direction)
     Player.attributes = {
+        dima = 0,
         p = {
             x = spawn.celX * 8,
             y = spawn.celY * 8
@@ -38,6 +39,7 @@ function Player:init(spawn, direction)
 
         maxSpeed = 1,
         jumpForce = 3,
+        launchForce = -3.5,
         coyoteTimeStart = 0.0,
         coyoteTime = 0.1,
         jumpBufferStart = 0.0,
@@ -68,6 +70,7 @@ function Player:init(spawn, direction)
         },
 
         isJumping = false,
+        isLaunching = false,
         isFalling = false,
         isDashing = false,
         onGround = false,
@@ -80,7 +83,7 @@ function Player:init(spawn, direction)
         animStart = 0,
 
         invincible = true,
-        invincibleDuration = 1,
+        invincibleDuration = 0.5,
         invincibleStart = time(),
 
         poops = 0,
@@ -228,6 +231,7 @@ function Player:updateYMovement()
             self.attributes.isJumping = false
             self.attributes.isFalling = false
             self.attributes.onGround = true
+            self.attributes.isLaunching = false
             self.attributes.coyoteTimeStart = 0.0
 
             CorrectPlayerPosition(self.attributes)
@@ -245,6 +249,7 @@ function Player:updateYMovement()
     else
         self.attributes.isJumping = false
         self.attributes.isFalling = false
+        self.attributes.isLaunching = false
         self.attributes.coyoteTimeStart = 0.0
         self.attributes.onGround = CollidingWithCelOnBottom(self.attributes)
 
@@ -281,7 +286,10 @@ function Player:updateYMovement()
             end
         end
     else
-        self.attributes.maxGravity = self.attributes.originalGravity * self.attributes.stopJumpGravityMultiplier
+        if not self.attributes.isLaunching then
+            self.attributes.maxGravity = self.attributes.originalGravity * self.attributes.stopJumpGravityMultiplier
+        end
+
         self.attributes.canPressJump = true
     end
 
@@ -304,13 +312,15 @@ end
 function Player:canJump()
     return (
         not self.attributes.isJumping and
-        not self.attributes.isFalling
+        not self.attributes.isFalling and
+        not self.attributes.isLaunching
     )
     or
     (
         self.attributes.isFalling and
         self.attributes.coyoteTimeStart > 0.0 and
-        time() - self.attributes.coyoteTimeStart < self.attributes.coyoteTime
+        time() - self.attributes.coyoteTimeStart < self.attributes.coyoteTime and
+        not self.attributes.isLaunching
     )
 end
 
@@ -320,9 +330,14 @@ function Player:isJumpBuffered()
 end
 
 function Player:doJump()
-    self.attributes.jumpRequested = false
     self.attributes.v.y = -self.attributes.jumpForce
     self.attributes.isJumping = true
+end
+
+function Player:Launch()
+    self.attributes.maxGravity = self.attributes.originalGravity
+    self.attributes.isLaunching = true
+    self.attributes.v.y = self.attributes.launchForce
 end
 
 function Player:updateAnimState()

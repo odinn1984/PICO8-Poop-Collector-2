@@ -1,6 +1,7 @@
 function GameLoopUpdate()
     UpdatePickups()
 	UpdateHazards()
+    UpdateSceneItems()
 
     Player:update()
 
@@ -24,24 +25,7 @@ local function drawCurrentLevel()
         levelCellDim.h
     )
 
-    if mget(Player:getPosition().x / 8, Player:getPosition().y / 8) == SPR_DOOR_OPENED then
-        if not IsLastLevel() then
-            NextLevel()
-        else
-            SetCurrentLevelBestTime()
-            SetGameState(STATE_GAME_WIN)
-        end
-    end
-
     UpdatePlayerHUD()
-end
-
-function GameLoopDraw()
-    cls()
-
-    drawCurrentLevel()
-    DrawPickups()
-	DrawHazards()
 
     if GetPoopsCollected() == GetPoopTarget() and not CurrentLevelKeyPresent() then
         CurrentLevelRevealKey()
@@ -50,8 +34,32 @@ function GameLoopDraw()
     if GetKeysCollected() == GetKeyTarget() and CurrentLevelKeyPresent() and not CurrentLevelOpen() then
         CurrentLevelOpenDoor()
     end
+end
 
+function GameLoopDraw()
+    drawCurrentLevel()
+    DrawPickups()
+	DrawHazards()
+    DrawSceneItems()
     DrawPlayerHUD()
 
     Player:draw()
+
+    if
+        CurrentLevelOpen() and
+        ObjectsOverlapping(
+            Player:getCollisionData(),
+            GetDoorCollisionData()
+        )
+    then
+        Wait(60)
+        FadeOut()
+
+        if not IsLastLevel() then
+            NextLevel()
+        else
+            SetCurrentLevelBestTime()
+            SetGameState(STATE_GAME_WIN)
+        end
+    end
 end

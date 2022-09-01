@@ -32,7 +32,7 @@ function AddSpike(cellX, cellY, flipX, flipY, horizontal)
     }
 
     spike.id = #spikesTable + 1
-    spike.attributes = CreateHazzard()
+    spike.attributes = CreateHazard()
 
     spike.attributes.p.x = cellX * 8
     spike.attributes.p.y = cellY * 8
