@@ -6,7 +6,7 @@ function _init()
 	menuitem(1, "restart game", ChangeStateMainMenu)
 	menuitem(2, "restart level", ResetCurrentLevel)
 
-	LoadLevel(9)
+	LoadLevel(1)
 
 	Player:init({
 		celX = GetCurrentLevelPlayerCellPos().cx,
