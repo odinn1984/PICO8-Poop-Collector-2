@@ -78,10 +78,10 @@ function AddKey(cellX, cellY)
     key.attributes.h = 8
     key.attributes.w = 8
     key.attributes.currentSprite = animData.sprites[1]
-    key.attributes.hitbox.x = 2
+    key.attributes.hitbox.x = 0
     key.attributes.hitbox.y = 0
-    key.attributes.hitbox.w = 4
-    key.attributes.hitbox.h = 4
+    key.attributes.hitbox.w = 8
+    key.attributes.hitbox.h = 8
     key.attributes.animationStart = time()
 
     keysTable[#keysTable + 1] = key

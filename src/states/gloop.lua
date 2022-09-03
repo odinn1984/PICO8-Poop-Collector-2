@@ -61,5 +61,7 @@ function GameLoopDraw()
             SetCurrentLevelBestTime()
             SetGameState(STATE_GAME_WIN)
         end
+
+        pal()
     end
 end

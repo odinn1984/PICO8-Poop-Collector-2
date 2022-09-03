@@ -114,13 +114,10 @@ function ResetCurrentLevel()
         currentLevelPlayerPosCells.dir
     )
     Player:respawn()
-
-    pal()
 end
 
-function ResetCurrentLevelBestTime()
-    dset(currentLevel - 1, 0)
-    ResetCurrentLevel()
+function ChangeStateMainMenu()
+    SetGameState(STATE_MAIN_MENU)
 end
 
 function NextLevel()

@@ -3,10 +3,10 @@ APPID="01341039-e93b-435b-8829-29cb6be5e3ed"
 function _init()
 	cartdata(APPID)
 
-	menuitem(1, "restart level", ResetCurrentLevel)
-	menuitem(2, "reset saved time", ResetCurrentLevelBestTime)
+	menuitem(1, "restart game", ChangeStateMainMenu)
+	menuitem(2, "restart level", ResetCurrentLevel)
 
-	LoadLevel(1)
+	LoadLevel(9)
 
 	Player:init({
 		celX = GetCurrentLevelPlayerCellPos().cx,

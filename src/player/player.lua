@@ -16,7 +16,6 @@ Player = {}
 
 function Player:init(spawn, direction)
     Player.attributes = {
-        dima = 0,
         p = {
             x = spawn.celX * 8,
             y = spawn.celY * 8
@@ -41,7 +40,7 @@ function Player:init(spawn, direction)
         jumpForce = 3,
         launchForce = -3.5,
         coyoteTimeStart = 0.0,
-        coyoteTime = 0.1,
+        coyoteTime = 0.03,
         jumpBufferStart = 0.0,
         jumpBuffer = 0.15,
         jumpRequested = false,
@@ -217,13 +216,16 @@ end
 function Player:updateYMovement()
     self.attributes.onGround = CollidingWithCelOnBottom(self.attributes)
 
-    local gravity = self.attributes.isDashing and 0.0 or self.attributes.maxGravity
+    local gravity = (self:isInCoyote() or self.attributes.isDashing) and 0.0 or self.attributes.maxGravity
 
-    if self.attributes.v.y > 0 then
+    if self.attributes.v.y > 0 and not self:isInCoyote() then
         self.attributes.isFalling = true
         self.attributes.onGround = false
 
-        if self.attributes.coyoteTimeStart == 0.0 and not self.attributes.isJumping then
+        if
+            self.attributes.coyoteTimeStart == 0.0 and
+            not self.attributes.isJumping
+        then
             self.attributes.coyoteTimeStart = time()
         end
 
@@ -244,13 +246,13 @@ function Player:updateYMovement()
         end
     elseif self.attributes.v.y < 0 then
         self.attributes.isJumping = true
+        self.attributes.isFalling = false
         self.attributes.onGround = false
         self.attributes.coyoteTimeStart = 0.0
     else
         self.attributes.isJumping = false
         self.attributes.isFalling = false
         self.attributes.isLaunching = false
-        self.attributes.coyoteTimeStart = 0.0
         self.attributes.onGround = CollidingWithCelOnBottom(self.attributes)
 
         if self:isJumpBuffered() then
@@ -260,15 +262,20 @@ function Player:updateYMovement()
         self.attributes.maxGravity = self.attributes.originalGravity
     end
 
-    if not self.attributes.onGround and not self.attributes.isDashing then
+    if
+        not self.attributes.onGround and
+        not self.attributes.isDashing and
+        not self:isInCoyote()
+    then
         self.attributes.v.y = Approach(
             self.attributes.v.y,
             self.attributes.fallSpeed,
             gravity
         )
-    elseif self.attributes.isDashing then
+    elseif self.attributes.isDashing or self:isInCoyote() then
         self.attributes.v.y = 0
     end
+
 
     if btn(BUTTON_O) then
         if self.attributes.canPressJump then
@@ -317,11 +324,16 @@ function Player:canJump()
     )
     or
     (
-        self.attributes.isFalling and
+        self:isInCoyote()
+    )
+end
+
+function Player:isInCoyote()
+    return
         self.attributes.coyoteTimeStart > 0.0 and
         time() - self.attributes.coyoteTimeStart < self.attributes.coyoteTime and
-        not self.attributes.isLaunching
-    )
+        not self.attributes.isLaunching and
+        not self.attributes.isDashing
 end
 
 function Player:isJumpBuffered()

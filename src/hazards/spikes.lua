@@ -49,7 +49,7 @@ function AddSpike(cellX, cellY, flipX, flipY, horizontal)
         end
 
         spike.attributes.hitbox.w = 6
-        spike.attributes.hitbox.h = 2
+        spike.attributes.hitbox.h = 4
     else
         if flipX then
             spike.attributes.hitbox.x = 4

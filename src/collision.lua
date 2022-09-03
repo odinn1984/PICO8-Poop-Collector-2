@@ -84,8 +84,8 @@ function ObjectsOverlapping(obj, otherObj)
             y = obj.p.y + obj.hitbox.y
         },
         {
-            x=obj.p.x + obj.hitbox.x + obj.hitbox.w,
-            y=obj.p.y + obj.hitbox.y + obj.hitbox.h
+            x=obj.p.x + obj.hitbox.x + obj.hitbox.w - 1,
+            y=obj.p.y + obj.hitbox.y + obj.hitbox.h - 1
         }
     }
 
@@ -95,8 +95,8 @@ function ObjectsOverlapping(obj, otherObj)
             y = otherObj.p.y + otherObj.hitbox.y
         },
         {
-            x=otherObj.p.x + otherObj.hitbox.x + otherObj.hitbox.w,
-            y=otherObj.p.y + otherObj.hitbox.y + otherObj.hitbox.h
+            x=otherObj.p.x + otherObj.hitbox.x + otherObj.hitbox.w - 1,
+            y=otherObj.p.y + otherObj.hitbox.y + otherObj.hitbox.h - 1
         }
     }
 

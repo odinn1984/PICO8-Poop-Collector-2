@@ -16,6 +16,7 @@ function GameUpdate()
     if currentState == STATE_GAME_LOOP then
         GameLoopUpdate()
     elseif currentState == STATE_GAME_WIN then
+    elseif currentState == STATE_MAIN_MENU then
     end
 end
 
@@ -25,5 +26,6 @@ function GameDraw()
     if currentState == STATE_GAME_LOOP then
         GameLoopDraw()
     elseif currentState == STATE_GAME_WIN then
+    elseif currentState == STATE_MAIN_MENU then
     end
 end
