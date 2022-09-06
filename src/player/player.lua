@@ -416,9 +416,11 @@ function Player:takeDamage()
     then
         FadeOut()
         Wait(20)
-        pal()
 
         self:respawn()
+        SetGameState(STATE_GAME_LEVEL_RESET)
+
+        pal()
     end
 end
 

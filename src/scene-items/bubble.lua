@@ -1,8 +1,9 @@
 SPR_BUBBLE = 27
 SPR_BUBBLE2 = 28
 
-local BUBBLE_RECREATE_DELAY = 2
+local BUBBLE_RECREATE_DELAY = 1.25
 
+local originalBubblesTable = {}
 local bubblesTable = {}
 local bubbleDelayedCreateTable = {}
 local animData = {
@@ -60,7 +61,11 @@ function UpdateAllBubbles()
             bubbleDelayedCreateTable[i] and
             time() - bubbleDelayedCreateTable[i].time >= BUBBLE_RECREATE_DELAY
         then
-            AddBubble(bubbleDelayedCreateTable[i].cx, bubbleDelayedCreateTable[i].cy)
+            AddBubble(
+                bubbleDelayedCreateTable[i].cx,
+                bubbleDelayedCreateTable[i].cy,
+                false
+            )
             deli(bubbleDelayedCreateTable, i)
         end
     end
@@ -79,7 +84,7 @@ function GetAllBubbles()
     return bubbles
 end
 
-function AddBubble(cellX, cellY)
+function AddBubble(cellX, cellY, isFromLevelInit)
     local bubble = {
         id = 0,
         attributes = {}
@@ -100,6 +105,12 @@ function AddBubble(cellX, cellY)
     bubble.attributes.animationStart = time()
 
     bubblesTable[#bubblesTable + 1] = bubble
+
+
+    if isFromLevelInit then
+        originalBubblesTable[#bubblesTable + 1] = bubble
+    end
+
     previousStartSpriteIdx = (previousStartSpriteIdx + 1) % #animData.sprites
     lastBubbleId = lastBubbleId + 1
 end
@@ -184,4 +195,17 @@ end
 
 function ClearAllBubbles()
     bubblesTable = {}
+    originalBubblesTable = {}
+    bubbleDelayedCreateTable = {}
+end
+
+function ResetAllBubbles()
+    bubblesTable = {}
+    bubbleDelayedCreateTable = {}
+
+    for i = 1,#originalBubblesTable do
+        if originalBubblesTable[i] then
+            bubblesTable[#bubblesTable + 1] = originalBubblesTable[i]
+        end
+    end
 end

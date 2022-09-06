@@ -90,3 +90,7 @@ function UpdateSpike(id)
         Player:takeDamage()
     end
 end
+
+function ClearAllSpikes()
+    spikesTable = {}
+end

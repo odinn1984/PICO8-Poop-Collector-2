@@ -3,8 +3,8 @@ APPID="01341039-e93b-435b-8829-29cb6be5e3ed"
 function _init()
 	cartdata(APPID)
 
-	menuitem(1, "restart game", ChangeStateMainMenu)
-	menuitem(2, "restart level", ResetCurrentLevel)
+	menuitem(1, "restart level", ResetCurrentLevel)
+	menuitem(2, "restart game", ChangeStateMainMenu)
 
 	LoadLevel(1)
 
@@ -19,5 +19,6 @@ function _update60()
 end
 
 function _draw()
+	cls()
 	GameDraw()
 end

@@ -1,7 +1,7 @@
 SPR_DOOR_CLOSED = 5
 SPR_DOOR_OPENED = 6
 
-MAX_LEVEL = 8
+MAX_LEVEL = 16
 
 local currentLevel = 1
 local currentLevelKeyPosCells = { cx = 0, cy = 0 }
@@ -65,7 +65,7 @@ function LoadLevel(levelNum)
                 keyTarget = keyTarget + 1
                 currentLevelKeyPosCells = { cx = cx, cy = cy }
             elseif curCell == SPR_BUBBLE then
-                AddBubble(cx, cy)
+                AddBubble(cx, cy, true)
 			elseif curCell == SPR_DASH_1 then
 				AddDash(cx, cy)
 			elseif curCell == SPR_SPIKE_H or curCell == SPR_SPIKE_H_FLIP_Y then
@@ -99,6 +99,9 @@ function LoadLevel(levelNum)
 end
 
 function ResetCurrentLevel()
+    Wait(60)
+    FadeOut()
+
     reload(0x1000, 0x1000, 0x2000)
 
     Player:ResetKeys()
@@ -106,6 +109,8 @@ function ResetCurrentLevel()
     Player:ResetPoints()
 
     ClearAllPickups()
+    ClearAllHazards()
+    ClearAllSceneItems()
     LoadLevel(currentLevel)
 
     Player:setSpawnPoint(
@@ -114,6 +119,8 @@ function ResetCurrentLevel()
         currentLevelPlayerPosCells.dir
     )
     Player:respawn()
+
+    pal()
 end
 
 function ChangeStateMainMenu()
@@ -121,7 +128,7 @@ function ChangeStateMainMenu()
 end
 
 function NextLevel()
-    if currentLevel == MAX_LEVEL then
+    if currentLevel >= MAX_LEVEL then
         return
     end
 
@@ -273,4 +280,8 @@ function SetCurrentLevelBestTime()
     if currentLevelTimePassed < GetCurrentLevelBestTime() or GetCurrentLevelBestTime() == 0 then
         dset(currentLevel - 1, currentLevelTimePassed)
     end
+end
+
+function RespawnPlayer()
+    Player:respawn()
 end

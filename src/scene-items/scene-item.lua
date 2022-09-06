@@ -28,3 +28,11 @@ end
 function UpdateSceneItems()
     UpdateAllBubbles()
 end
+
+function ClearAllSceneItems()
+    ClearAllBubbles()
+end
+
+function ResetReappearingSceneItems()
+    ResetAllBubbles()
+end

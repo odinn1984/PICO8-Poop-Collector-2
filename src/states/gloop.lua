@@ -52,16 +52,11 @@ function GameLoopDraw()
             GetDoorCollisionData()
         )
     then
-        Wait(60)
-        FadeOut()
-
         if not IsLastLevel() then
             NextLevel()
         else
             SetCurrentLevelBestTime()
             SetGameState(STATE_GAME_WIN)
         end
-
-        pal()
     end
 end

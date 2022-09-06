@@ -28,3 +28,10 @@ end
 function UpdateHazards()
     UpdateAllSpikes()
 end
+
+function ClearAllHazards()
+    ClearAllSpikes()
+end
+
+function ResetReappearingHazards()
+end
