@@ -195,7 +195,12 @@ end
 
 function Player:canDash()
     return
-        self.attributes.dashEnabled and
+        (
+            self.attributes.dashEnabled or (
+                dget(DATA_HAS_DASH) == 1 and
+                GetCurrentLevelNumber() > DASH_AQUIRED_LEVEL_NUMBER
+            )
+        ) and
         self:canMove() and
         not self.attributes.isDashing and
         time() - self.attributes.dashCooldownStartTime > self.attributes.dashCooldown
@@ -495,6 +500,8 @@ end
 
 function Player:EnableDash()
     self.attributes.dashEnabled = true;
+
+    dset(DATA_HAS_DASH, 1)
 end
 
 function Player:getDirection()

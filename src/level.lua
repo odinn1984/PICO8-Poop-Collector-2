@@ -1,7 +1,7 @@
 SPR_DOOR_CLOSED = 5
 SPR_DOOR_OPENED = 6
 
-MAX_LEVEL = 16
+MAX_LEVEL = 23
 
 local currentLevel = 1
 local currentLevelKeyPosCells = { cx = 0, cy = 0 }
@@ -13,6 +13,12 @@ local keyPresent = false
 local doorOpen = false
 local levelStartTime = time()
 local levelStartTimeSet = false
+local levelOrder = {
+    1, 2, 3, 4, 5, 6, 7, 8,
+    9, 10, 11, 12, 13, 14, 15, 16,
+    17, 18, 22, 19, 20, 21, 23, 24,
+    25, 26, 27, 28, 29, 30, 31, 32
+}
 
 local function shouldClearCell(cx, cy)
     local curCell = mget(cx, cy)
@@ -37,8 +43,11 @@ local function shouldClearCell(cx, cy)
 end
 
 function LoadLevel(levelNum)
-    local cxStart = ((levelNum - 1) * 16) % 128
-    local cyStart = (flr((levelNum - 1) / 8) * 16) % 128
+    levelNum = min(max(1, levelNum), MAX_LEVEL)
+
+    local effectiveLevelNum = levelOrder[levelNum]
+    local cxStart = ((effectiveLevelNum - 1) * 16) % 128
+    local cyStart = (flr((effectiveLevelNum - 1) / 8) * 16) % 128
 
     currentLevelKeyPosCells = { cx = 0, cy = 0 }
     currentLevelPlayerPosCells = { cx = 0, cy = 0, dir= DIRECTION_NONE }
@@ -147,16 +156,20 @@ function GetCurrentLevelNumber()
 end
 
 function GetCurrentLevelCellPos()
+    local effectoveCurrentLevel = levelOrder[currentLevel]
+
     return {
-        cx = ((currentLevel - 1) * 16) % 128,
-        cy = (flr((currentLevel - 1) / 8) * 16) % 128
+        cx = ((effectoveCurrentLevel - 1) * 16) % 128,
+        cy = (flr((effectoveCurrentLevel - 1) / 8) * 16) % 128
     }
 end
 
 function GetCurrentLevelPos()
+    local effectoveCurrentLevel = levelOrder[currentLevel]
+
     return {
-        x = (((currentLevel - 1) * 16) % 128) * 8,
-        y = (((flr((currentLevel - 1) / 8)) * 16) % 128) * 8
+        x = (((effectoveCurrentLevel - 1) * 16) % 128) * 8,
+        y = (((flr((effectoveCurrentLevel - 1) / 8)) * 16) % 128) * 8
     }
 end
 
@@ -271,17 +284,13 @@ function GetCurrentLevelTimePassed()
 end
 
 function GetCurrentLevelBestTime()
-    return dget(currentLevel - 1)
+    return dget(levelOrder[currentLevel] - 1)
 end
 
 function SetCurrentLevelBestTime()
     local currentLevelTimePassed = GetCurrentLevelTimePassed()
 
     if currentLevelTimePassed < GetCurrentLevelBestTime() or GetCurrentLevelBestTime() == 0 then
-        dset(currentLevel - 1, currentLevelTimePassed)
+        dset(levelOrder[currentLevel] - 1, currentLevelTimePassed)
     end
-end
-
-function RespawnPlayer()
-    Player:respawn()
 end
