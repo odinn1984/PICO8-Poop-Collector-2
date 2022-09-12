@@ -56,7 +56,7 @@ function Player:init(spawn, direction)
         canPressDash = true,
         dashStartTime = time(),
         dashCooldownStartTime = time(),
-        dashCooldown = 0.3,
+        dashCooldown = 0.2,
 
         w = 8,
         h = 8,
@@ -197,7 +197,7 @@ function Player:canDash()
     return
         (
             self.attributes.dashEnabled or (
-                dget(DATA_HAS_DASH) == 1 and
+                dget(DATA_HAS_DASH_IDX) == 1 and
                 GetCurrentLevelNumber() > DASH_AQUIRED_LEVEL_NUMBER
             )
         ) and
@@ -210,6 +210,8 @@ function Player:doDash()
     self.attributes.dashStartTime = time()
     self.attributes.v.x = self.attributes.direction * self.attributes.dashSpeed
     self.attributes.isDashing = true
+
+    sfx(SFX_DASH)
 end
 
 function Player:finishedDash()
@@ -349,6 +351,8 @@ end
 function Player:doJump()
     self.attributes.v.y = -self.attributes.jumpForce
     self.attributes.isJumping = true
+
+    sfx(SFX_JUMP)
 end
 
 function Player:Launch()
@@ -419,13 +423,10 @@ function Player:takeDamage()
         not self.attributes.invincible and
         not self:isDead()
     then
-        FadeOut()
-        Wait(20)
+        sfx(SFX_TAKE_DAMAGE)
 
         self:respawn()
         SetGameState(STATE_GAME_LEVEL_RESET)
-
-        pal()
     end
 end
 
@@ -501,7 +502,7 @@ end
 function Player:EnableDash()
     self.attributes.dashEnabled = true;
 
-    dset(DATA_HAS_DASH, 1)
+    dset(DATA_HAS_DASH_IDX, 1)
 end
 
 function Player:getDirection()

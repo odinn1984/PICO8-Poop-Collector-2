@@ -5,13 +5,6 @@ function _init()
 
 	menuitem(1, "restart level", ResetCurrentLevel)
 	menuitem(2, "restart game", ChangeStateMainMenu)
-
-	LoadLevel(1)
-
-	Player:init({
-		celX = GetCurrentLevelPlayerCellPos().cx,
-		celY = GetCurrentLevelPlayerCellPos().cy
-	}, GetCurrentLevelPlayerCellPos().dir)
 end
 
 function _update60()
@@ -19,6 +12,5 @@ function _update60()
 end
 
 function _draw()
-	cls()
 	GameDraw()
 end

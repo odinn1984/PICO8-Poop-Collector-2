@@ -1,4 +1,4 @@
-function GameLoopUpdate()
+function UpdateGameLoop()
     UpdatePickups()
 	UpdateHazards()
     UpdateSceneItems()
@@ -36,7 +36,9 @@ local function drawCurrentLevel()
     end
 end
 
-function GameLoopDraw()
+function DrawGameLoop()
+    cls()
+
     drawCurrentLevel()
     DrawPickups()
 	DrawHazards()
@@ -53,6 +55,7 @@ function GameLoopDraw()
         )
     then
         if not IsLastLevel() then
+            sfx(SFX_LEVEL_CLEAR)
             NextLevel()
         else
             SetCurrentLevelBestTime()

@@ -137,6 +137,7 @@ function UpdateKey(id)
     then
         Player:incrementKeys(1)
         DestroyKey(key.id)
+        sfx(SFX_COLLECT_KEY)
     end
 end
 

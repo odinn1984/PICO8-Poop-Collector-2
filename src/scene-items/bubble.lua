@@ -163,6 +163,7 @@ function UpdateBubble(id)
     then
         Player:Launch()
         DestroyBubble(bubble.id)
+        sfx(SFX_BUBBLE_POP)
     end
 end
 

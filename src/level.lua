@@ -43,7 +43,7 @@ local function shouldClearCell(cx, cy)
 end
 
 function LoadLevel(levelNum)
-    levelNum = min(max(1, levelNum), MAX_LEVEL)
+    SetCurrentLevel(levelNum)
 
     local effectiveLevelNum = levelOrder[levelNum]
     local cxStart = ((effectiveLevelNum - 1) * 16) % 128
@@ -108,9 +108,6 @@ function LoadLevel(levelNum)
 end
 
 function ResetCurrentLevel()
-    Wait(60)
-    FadeOut()
-
     reload(0x1000, 0x1000, 0x2000)
 
     Player:ResetKeys()
@@ -120,6 +117,9 @@ function ResetCurrentLevel()
     ClearAllPickups()
     ClearAllHazards()
     ClearAllSceneItems()
+
+    SetGameState(STATE_GAME_LEVEL_RESET)
+
     LoadLevel(currentLevel)
 
     Player:setSpawnPoint(
@@ -128,12 +128,28 @@ function ResetCurrentLevel()
         currentLevelPlayerPosCells.dir
     )
     Player:respawn()
+end
 
-    pal()
+function ResetReappearingLevelItems()
+    ResetReappearingSceneItems()
+    ResetReappearingHazards()
 end
 
 function ChangeStateMainMenu()
+    FadeOut()
+
+    SetCurrentLevel(1)
+    camera(0, 0)
+
+    Wait(RESET_WAIT_TIME)
     SetGameState(STATE_MAIN_MENU)
+
+    cls()
+    pal()
+end
+
+function SetCurrentLevel(levelNum)
+    currentLevel = min(max(1, levelNum), MAX_LEVEL)
 end
 
 function NextLevel()

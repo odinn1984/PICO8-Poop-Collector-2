@@ -139,6 +139,7 @@ function UpdatePoop(id)
     then
         Player:incrementPoops(1)
         DestroyPoop(poop.id)
+        sfx(SFX_COLLECT_POOP)
     end
 end
 
