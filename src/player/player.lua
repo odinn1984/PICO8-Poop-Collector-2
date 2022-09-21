@@ -74,6 +74,7 @@ function Player:init(spawn, direction)
         isDashing = false,
         onGround = false,
         canMove = false,
+        moved = false,
 
         direction = direction,
         originalDirection = direction,
@@ -134,21 +135,40 @@ function Player:draw()
 end
 
 function Player:update()
-    if self:canMove() then
+    if self:canMove() and self:Moved() then
         self:updateYMovement()
         self:updateXMovement()
     end
 
     self:animate()
 
-    if time() - self.attributes.invincibleStart >= self.attributes.invincibleDuration then
+    if
+        self.attributes.invincible and
+        time() - self.attributes.invincibleStart >= self.attributes.invincibleDuration
+    then
         self.attributes.invincible = false
         self.attributes.canMove = true
+
+        sfx(SFX_MOVE_PROMPT)
+    end
+
+    if
+        self:canMove() and
+        (
+            btnp(BUTTON_RIGHT) or btnp(BUTTON_LEFT) or
+            btnp(BUTTON_O) or btnp(BUTTON_X)
+        )
+    then
+        self.attributes.moved = true
     end
 end
 
 function Player:canMove()
     return self.attributes.canMove
+end
+
+function Player:Moved()
+    return self.attributes.moved
 end
 
 function Player:updateXMovement()
@@ -193,14 +213,16 @@ function Player:updateXMovement()
     self.attributes.prevP.x = self.attributes.p.x
 end
 
+function Player:DashEnabled()
+    return self.attributes.dashEnabled or (
+        dget(DATA_HAS_DASH_IDX) == 1 and
+        GetCurrentLevelNumber() > DASH_AQUIRED_LEVEL_NUMBER
+    )
+end
+
 function Player:canDash()
     return
-        (
-            self.attributes.dashEnabled or (
-                dget(DATA_HAS_DASH_IDX) == 1 and
-                GetCurrentLevelNumber() > DASH_AQUIRED_LEVEL_NUMBER
-            )
-        ) and
+        self:DashEnabled() and
         self:canMove() and
         not self.attributes.isDashing and
         time() - self.attributes.dashCooldownStartTime > self.attributes.dashCooldown
@@ -444,6 +466,7 @@ function Player:respawn()
     self.attributes.invincible = true
     self.attributes.invincibleStart = time()
     self.attributes.canMove = false
+    self.attributes.moved = false
     self.attributes.isJumping = false
     self.attributes.isDashing = false
     self.attributes.isFalling = false

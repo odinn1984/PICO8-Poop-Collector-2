@@ -11,6 +11,17 @@ end
 
 function SetGameState(newState)
     currentState = newState
+
+    if
+        currentState == STATE_GAME_LOOP or
+        currentState == STATE_GAME_LEVEL_RESET
+    then
+        menuitem(MENU_ITEM_RESTART_IDX, "restart level", ResetCurrentLevel)
+	    menuitem(MENU_ITEM_MAINMENU_IDX, "restart game", ChangeStateMainMenu)
+    else
+        menuitem(MENU_ITEM_RESTART_IDX)
+	    menuitem(MENU_ITEM_MAINMENU_IDX)
+    end
 end
 
 function GameUpdate()

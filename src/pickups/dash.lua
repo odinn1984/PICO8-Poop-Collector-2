@@ -1,5 +1,6 @@
 SPR_DASH_1 = 9
 SPR_DASH_2 = 10
+SPR_DASH_DISABLED = 8
 
 local dashesTable = {}
 local animData = {

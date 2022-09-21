@@ -36,7 +36,8 @@
     "sfx",
     "spr",
     "sub",
-    "time"
+    "time",
+    "palt"
   ],
   "cSpell.words": [
     "❎",
@@ -47,6 +48,10 @@
     "cycjimmy",
     "DOCKERHUB",
     "Fraegdegjevar",
+    "gloop",
+    "gmenu",
+    "greset",
+    "gstate",
     "itchio",
     "josephbmanley",
     "Kikimora",

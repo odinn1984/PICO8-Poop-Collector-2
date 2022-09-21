@@ -5,7 +5,7 @@ function UpdateGameLoop()
 
     Player:update()
 
-    if Player:canMove() and not IsLevelStartTimeSet() then
+    if Player:Moved() and not IsLevelStartTimeSet() then
         SetCurrentLevelStartTime(time())
     end
 end

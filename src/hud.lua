@@ -15,7 +15,7 @@ local function drawPlayerTarget()
     else
         print(
             GetPoopsRemaining(),
-            offset.x + 13,
+            offset.x + 23,
             offset.y + 3,
             txtColor
         )
@@ -23,9 +23,29 @@ local function drawPlayerTarget()
 
     spr(
         curSpr,
-        offset.x + 3,
+        offset.x + 13,
         offset.y + 1
     )
+end
+
+local function drawDashState()
+    local offset = GetCurrentLevelPos()
+
+    if Player and Player:DashEnabled() then
+        spr(
+            SPR_DASH_1,
+            offset.x + 3,
+            offset.y + 1
+        )
+    else
+        palt(CLR_BLACK, false)
+        spr(
+            SPR_DASH_DISABLED,
+            offset.x + 3,
+            offset.y + 1
+        )
+        palt(CLR_BLACK, true)
+    end
 end
 
 local function drawCurrentLevel()
@@ -83,10 +103,33 @@ local function drawTimer()
     )
 end
 
+local function promptPlayerMove()
+    if Player and Player:canMove() and not Player:Moved() then
+        local msg =
+            CHAR_BUTTON_LEFT .. '/' ..
+            CHAR_BUTTON_RIGHT .. '/' ..
+            CHAR_BUTTON_X .. '/' ..
+            CHAR_BUTTON_O
+        local offset = GetCurrentLevelPos()
+
+        local rectStartXOffset = offset.x + 56 - (#msg * 2) - 4
+        local rectEndXOffset = offset.x + 56 + (#msg * 2) + 18
+        local rectStartYOffset = offset.y + 56
+        local rectEndYOffset = offset.y + 68
+
+        rectfill(rectStartXOffset, rectStartYOffset, rectEndXOffset, rectEndYOffset, CLR_DARK_BLUE)
+        rect(rectStartXOffset, rectStartYOffset, rectEndXOffset, rectEndYOffset, CLR_ORANGE)
+
+        print(msg, offset.x + 56 - (#msg * 2), offset.y + 60, CLR_WHITE)
+    end
+end
+
 function DrawPlayerHUD()
     drawPlayerTarget()
+    drawDashState()
     drawCurrentLevel()
     drawTimer()
+    promptPlayerMove()
 end
 
 function UpdatePlayerHUD()

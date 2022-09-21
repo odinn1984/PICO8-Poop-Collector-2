@@ -8,7 +8,7 @@ local animData = {
         SPR_POOP,
         SPR_POOP_1
     },
-    interval = 0.5
+    interval = 0.3
 }
 local previousStartSpriteIdx = 0
 local lastPoopId = 0
@@ -114,7 +114,7 @@ local function animatePoop(id)
         return
     end
 
-    if time() - poop.attributes.animationStart > animData.interval then
+    if time() - poop.attributes.animationStart > (animData.interval + rnd(0.1)) then
         local nextSpriteIdx = poop.attributes.currentSprite - 11
 
         poop.attributes.currentSprite = animData.sprites[((nextSpriteIdx + 1) % #animData.sprites) + 1]
