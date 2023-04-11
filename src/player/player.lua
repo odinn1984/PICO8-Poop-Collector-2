@@ -14,7 +14,7 @@ local PLAYER_DASH = { name = "DASH", sprites = { SPR_STEP, SPR_JUMP_1 }, interva
 
 Player = {}
 
-function Player:init(spawn, direction)
+function Player:init(spawn, direction, challengeMode)
     Player.attributes = {
         p = {
             x = spawn.celX * 8,
@@ -36,6 +36,7 @@ function Player:init(spawn, direction)
             y = 0
         },
 
+        challengeMode = challengeMode,
         maxSpeed = 1,
         jumpForce = 3,
         launchForce = -3.5,
@@ -442,18 +443,21 @@ end
 
 function Player:takeDamage()
     if
-        not self.attributes.invincible and
-        not self:isDead()
+        not self.attributes.invincible
     then
         sfx(SFX_TAKE_DAMAGE)
 
-        self:respawn()
-        SetGameState(STATE_GAME_LEVEL_RESET)
+        if self.attributes.challengeMode then
+            SetGameState(STATE_GAME_OVER)
+        else
+            self:respawn()
+            SetGameState(STATE_GAME_LEVEL_RESET)
+        end
     end
 end
 
-function Player:isDead()
-    return false
+function Player:IsInChallengeMode()
+    return self.attributes.challengeMode
 end
 
 function Player:setSpawnPoint(x, y, direction)

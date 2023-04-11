@@ -49,6 +49,10 @@ local function drawDashState()
 end
 
 local function drawCurrentLevel()
+    if (GetCurrentLevelNumber() > FINAL_LEVEL) then
+        return;
+    end
+
     local offset = GetCurrentLevelPos()
     local lvlText = 'lvl ' .. GetCurrentLevelNumber()
     local lvlTextStartPosX = offset.x + 64 - (#lvlText * 2)
@@ -125,11 +129,13 @@ local function promptPlayerMove()
 end
 
 function DrawPlayerHUD()
-    drawPlayerTarget()
-    drawDashState()
-    drawCurrentLevel()
-    drawTimer()
-    promptPlayerMove()
+    if (GetCurrentLevelNumber() <= FINAL_LEVEL) then
+        drawPlayerTarget()
+        drawDashState()
+        drawCurrentLevel()
+        drawTimer()
+        promptPlayerMove()
+    end
 end
 
 function UpdatePlayerHUD()
