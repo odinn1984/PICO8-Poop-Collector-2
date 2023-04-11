@@ -2,7 +2,6 @@ function UpdateGameInstructions()
     if btnp(BUTTON_O) or btnp(BUTTON_X) then
         sfx(SFX_MENU_ACCEPT)
         SetGameState(STATE_MAIN_MENU)
-        SetGameState(STATE_MAIN_MENU)
     end
 end
 

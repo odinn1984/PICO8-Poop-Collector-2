@@ -4,6 +4,8 @@ end
 function DrawGameOver()
     cls()
 
+    camera(0, 0)
+
     rectfill(0, 0, 128, 10, 1)
     rectfill(0, 118, 128, 128, 1)
 

@@ -25,8 +25,6 @@ function UpdateInitialMenuSelection()
 end
 
 local function startGame(levelNum, resetLevelProgress, challengeMode)
-    sfx(SFX_MENU_ACCEPT)
-
     SetGameState(STATE_GAME_LEVEL_RESET)
     LoadLevel(levelNum)
 
@@ -42,6 +40,10 @@ local function startGame(levelNum, resetLevelProgress, challengeMode)
     ResetCurrentLevel()
 end
 
+function StartGameInChallengeMode()
+    startGame(STARTING_LEVEL_NUM, false, true)
+end
+
 function UpdateMainMenu()
     local savedLevelNum = dget(DATA_LEVEL_REACHED_IDX)
 
@@ -54,11 +56,14 @@ function UpdateMainMenu()
             if not menuItems[1].active then
                 sfx(SFX_MENU_ERROR)
             else
+                sfx(SFX_MENU_ACCEPT)
                 startGame(savedLevelNum, false, false)
             end
         elseif currentMenuItem == 1 then
+            sfx(SFX_MENU_ACCEPT)
             startGame(STARTING_LEVEL_NUM, true, false)
         elseif currentMenuItem == 2 then
+            sfx(SFX_MENU_ACCEPT)
             startGame(STARTING_LEVEL_NUM, false, true)
         elseif currentMenuItem == 3 then
             sfx(SFX_MENU_ACCEPT)

@@ -21,18 +21,26 @@ function SetGameState(newState)
     then
         music(MUSIC_NONE)
 
-        if (currentState == STATE_GAME_LOOP and GetCurrentLevelNumber() > FINAL_LEVEL) then
+        if currentState == STATE_GAME_LOOP and GetCurrentLevelNumber() > FINAL_LEVEL then
             music(MUSIC_WIN)
         end
 
+        menuitem(MENU_ITEM_NEWGAME_IDX)
         menuitem(MENU_ITEM_RESTART_IDX, "restart level", ResetCurrentLevel)
 	    menuitem(MENU_ITEM_MAINMENU_IDX, "restart game", ChangeStateMainMenu)
     elseif currentState == STATE_GAME_OVER then
         music(MUSIC_OVER)
         menuitem(MENU_ITEM_RESTART_IDX)
+        menuitem(MENU_ITEM_NEWGAME_IDX, "try again", StartGameInChallengeMode)
         menuitem(MENU_ITEM_MAINMENU_IDX, "restart game", ChangeStateMainMenu)
     else
-        music(MUSIC_NONE)
+        if currentState == STATE_MAIN_MENU then
+            music(MUSIC_MENU)
+        else
+            music(MUSIC_NONE)
+        end
+
+        menuitem(MENU_ITEM_NEWGAME_IDX)
         menuitem(MENU_ITEM_RESTART_IDX)
 	    menuitem(MENU_ITEM_MAINMENU_IDX)
     end
