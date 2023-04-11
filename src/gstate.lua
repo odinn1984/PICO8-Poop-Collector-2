@@ -19,12 +19,20 @@ function SetGameState(newState)
         currentState == STATE_GAME_LOOP or
         currentState == STATE_GAME_LEVEL_RESET
     then
+        music(MUSIC_NONE)
+
+        if (currentState == STATE_GAME_LOOP and GetCurrentLevelNumber() > FINAL_LEVEL) then
+            music(MUSIC_WIN)
+        end
+
         menuitem(MENU_ITEM_RESTART_IDX, "restart level", ResetCurrentLevel)
 	    menuitem(MENU_ITEM_MAINMENU_IDX, "restart game", ChangeStateMainMenu)
     elseif currentState == STATE_GAME_OVER then
+        music(MUSIC_OVER)
         menuitem(MENU_ITEM_RESTART_IDX)
-	    menuitem(MENU_ITEM_MAINMENU_IDX, "restart game", ChangeStateMainMenu)
+        menuitem(MENU_ITEM_MAINMENU_IDX, "restart game", ChangeStateMainMenu)
     else
+        music(MUSIC_NONE)
         menuitem(MENU_ITEM_RESTART_IDX)
 	    menuitem(MENU_ITEM_MAINMENU_IDX)
     end
@@ -35,8 +43,6 @@ function GameUpdate()
         UpdateGameReset()
     elseif currentState == STATE_GAME_LOOP then
         UpdateGameLoop()
-    elseif currentState == STATE_GAME_WIN then
-        UpdateGameWin()
     elseif currentState == STATE_GAME_OVER then
         UpdateGameOver()
     elseif currentState == STATE_MAIN_MENU then
@@ -53,8 +59,6 @@ function GameDraw()
         DrawGameReset()
     elseif currentState == STATE_GAME_LOOP then
         DrawGameLoop()
-    elseif currentState == STATE_GAME_WIN then
-        DrawGameWin()
     elseif currentState == STATE_GAME_OVER then
         DrawGameOver()
     elseif currentState == STATE_MAIN_MENU then

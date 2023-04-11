@@ -143,9 +143,11 @@ function ChangeStateMainMenu()
 
     camera(0, 0)
 
+    music(MUSIC_NONE)
     Wait(RESET_WAIT_TIME)
     UpdateInitialMenuSelection()
     SetGameState(STATE_MAIN_MENU)
+    music(MUSIC_MENU)
 
     cls()
     pal()

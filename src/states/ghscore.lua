@@ -1,6 +1,7 @@
 function UpdateHighScores()
     if btnp(BUTTON_O) or btnp(BUTTON_X) then
         sfx(SFX_MENU_ACCEPT)
+        music(MUSIC_MENU)
         SetGameState(STATE_MAIN_MENU)
     end
 end
@@ -9,7 +10,7 @@ local function drawBestTimesTable()
     rect(42, 0, 43, 128, CLR_DARK_BLUE)
     rect(84, 0, 85, 128, CLR_DARK_BLUE)
 
-    for i=0,31 do
+    for i=0,23 do
         local bestTime = dget(i) > 0 and GetFormattedTime(dget(i)) or "   " .. CHAR_TIME
         local xPos = 6 + (42 * flr( i / 11))
         local yPos = 6 + (10 * (i % 11))

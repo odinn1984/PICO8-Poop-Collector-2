@@ -129,11 +129,13 @@ local function promptPlayerMove()
 end
 
 function DrawPlayerHUD()
-    drawPlayerTarget()
-    drawDashState()
-    drawCurrentLevel()
-    drawTimer()
-    promptPlayerMove()
+    if (GetCurrentLevelNumber() <= FINAL_LEVEL) then
+        drawPlayerTarget()
+        drawDashState()
+        drawCurrentLevel()
+        drawTimer()
+        promptPlayerMove()
+    end
 end
 
 function UpdatePlayerHUD()
