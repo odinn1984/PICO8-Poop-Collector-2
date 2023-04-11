@@ -33,3 +33,7 @@ function FindIndexFromZero(table, val)
 
 	return -1
 end
+
+function PrintCenter(text, yPos, color)
+    print(text, 64 - (#text * 2), yPos, color)
+end

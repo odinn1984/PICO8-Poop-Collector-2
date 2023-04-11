@@ -15,7 +15,6 @@ local function drawCurrentLevel()
     local levelPos = GetCurrentLevelPos()
     local levelCellDim = GetCurrentLevelDimentionCells()
 
-    camera(levelPos.x, levelPos.y)
     map(
         levelCellPos.cx,
         levelCellPos.cy,

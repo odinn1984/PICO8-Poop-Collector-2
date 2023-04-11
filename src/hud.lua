@@ -49,6 +49,10 @@ local function drawDashState()
 end
 
 local function drawCurrentLevel()
+    if (GetCurrentLevelNumber() > FINAL_LEVEL) then
+        return;
+    end
+
     local offset = GetCurrentLevelPos()
     local lvlText = 'lvl ' .. GetCurrentLevelNumber()
     local lvlTextStartPosX = offset.x + 64 - (#lvlText * 2)
